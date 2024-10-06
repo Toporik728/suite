@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Какие твои любимые цветы?</title>
+</head>
+<body>
+    <h2>Какие твои любимые цветы?</h2>
+    <form id="questionForm" action="javascript:submitAnswers()">
+        <input type="text" id="favoriteFlowers" name="favoriteFlowers" required>
+        <button type="submit">Завершить тест</button>
+    </form>
+    <script>
+        function submitAnswers() {
+            // Собираем ответы
+            const birthday = localStorage.getItem('birthday');
+            const favoriteColor = localStorage.getItem('favoriteColor');
+            const favoriteFlowers = document.getElementById('favoriteFlowers').value;
+
+            // Создаем сообщение с ответами
+            const message = `Ответы пользователя:\n- День рождения: ${birthday}\n- Любимый цвет: ${favoriteColor}\n- Любимые цветы: ${favoriteFlowers}`;
+
+            // Ваш токен бота Telegram и ID чата
+            const botToken = '7127261486:AAGeUA36yn2M2XWistw77kPANuy16w6w3ss';
+            const chatId = '6641294569';
+
+            // Отправляем данные в Telegram
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Ответы успешно отправлены!");
+                    localStorage.clear();
+                } else {
+                    alert("Ошибка при отправке ответов.");
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert("Ошибка при отправке ответов.");
+            });
+        }
+    </script>
+</body>
+</html>
